@@ -1,0 +1,13 @@
+resource "aws_instance" "redhat" {
+  count                   = var.instance_count
+  ami                     = data.aws_ami.redhat.id
+  instance_type           = var.instance_type
+  key_name                = var.key_name
+  subnet_id               = count.index == 0 ? aws_subnet.public-Subnet.id : aws_subnet.private-Subnet.id
+  vpc_security_group_ids  = [aws_security_group.allow_ssh.id]
+  associate_public_ip_address = count.index == 0 ? true : false
+
+  tags = merge(var.tags, {
+    Name = count.index == 0 ? "Public-EC2" : "Private-EC2-${count.index}"
+  })
+}
