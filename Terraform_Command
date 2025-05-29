@@ -1,1 +1,2 @@
 terraform apply -replace="aws_instance.web1"
+terraform destroy -target=aws_instance.redhat[1] -target=aws_instance.redhat[3]
